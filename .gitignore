@@ -1,3 +1,7 @@
 push.cmd
 initGit.cmd
 /.vscode/*
+/PointCS/__pycache__/*
+/PointCS/程序/速建者/令牌
+/PointCS/日志/*.log
+/PointCS/软件包/__pycache__/*
