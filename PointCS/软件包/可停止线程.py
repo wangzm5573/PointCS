@@ -1,6 +1,7 @@
 from __future__ import annotations
 from .蟒蛇 import *
 import ctypes
+__all__ = ["可停止线程列表", "可停止线程"]
 
 
 
@@ -9,7 +10,7 @@ import ctypes
 class 可停止线程被停止(异常基类): pass
 class 可停止线程异常(异常): pass
 class 可停止线程(线程.线程):
-    @property
+    @属性装饰器
     def 正在运行(当前对象: 可停止线程):
         return 当前对象.是否在运行()
 
