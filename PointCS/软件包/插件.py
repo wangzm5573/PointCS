@@ -158,7 +158,8 @@ class 租赁服(对象):
                         错误信息 = 错误信息[:-1]
                     raise 异常类型(错误信息)
 
-                if 去色输出 not in ["FastBuilder Phoenix 运行过程遇到问题\n", "Stack dump 于上方显示。错误为：\n"]:
+                if (去色输出 not in ["FastBuilder Phoenix 运行过程遇到问题\n", "Stack dump 于上方显示。错误为：\n"]) \
+                    and (去色输出 not in 错误信息):
                     错误信息 += 去色输出
                 if 去色输出.开头是否为("[RATE LIMIT]"):
                     异常类型 = 速建者启动过于频繁异常
@@ -180,4 +181,4 @@ class 租赁服(对象):
 
             if (速建者进程返回码 := 当前对象.速建者进程.是否终止()) is not 无:
                 当前对象.速建者运行状态 = 速建者运行状态.未启动
-                raise 异常类型("速建者退出.")
+                raise 异常类型("速建者退出." if (not 错误信息) else 错误信息)
