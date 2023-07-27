@@ -264,7 +264,11 @@ class 时间:
     @静态方法
     def 暂停执行(秒数: 联合[整数, 浮点数]) -> 无:
         return time.sleep(秒数)
+    @静态方法
+    def 性能计时器() -> 浮点数:
+        return time.perf_counter()
 禁果.诅咒(time, "暂停执行", 时间.暂停执行)
+禁果.诅咒(time, "性能计时器", 时间.性能计时器)
 import time as 时间
 
 
