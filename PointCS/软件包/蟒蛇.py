@@ -2,9 +2,10 @@ from __future__ import annotations
 __all__ = ["JSON", "JSON解码器", "JSON解码失败", "不可重写的函数的装饰器", "任意", "值不合法", "值的类型不合法",
            "假", "元组", "列表", "协议", "可调用", "可迭代", "可选", "子进程", "字典", "字符串", "字节串", "字节数组",
            "字面", "字面别名", "布尔值", "常量", "异常", "打印", "打开", "支持的索引", "整数", "文本输入输出包装器", "无",
-           "最大值", "最小值", "检查对象是否是类的实例", "模块", "永不使用", "永不返回", "泛型别名", "浮点数", "真",
+           "最大值", "最小值", "对象是否是类的实例", "模块", "永不使用", "永不返回", "泛型别名", "浮点数", "真",
            "禁果", "类型", "类方法", "联合", "输入", "输入输出", "重载函数的装饰器", "静态方法", "正则", "对象", "枚举", "线程",
-           "全部为真", "任意为真", "长度", "异常基类", "垃圾回收", "异常回溯", "时间", "系统", "属性装饰器", "平台"]
+           "全部为真", "任意为真", "长度", "异常基类", "垃圾回收", "异常回溯", "时间", "系统", "属性装饰器", "平台", "套接字",
+           "功能未实现"]
 
 
 
@@ -17,7 +18,7 @@ __all__ = ["JSON", "JSON解码器", "JSON解码失败", "不可重写的函数�
 from builtins import (
     type as 类型,
     BaseException as 异常基类, Exception as 异常, TypeError as 值的类型不合法, ValueError as 值不合法,
-    classmethod as 类方法, staticmethod as 静态方法,
+    classmethod as 类方法, staticmethod as 静态方法, NotImplementedError as 功能未实现,
 )
 from typing import (
     Optional as 可选, Union as 联合, Callable as 可调用, Iterable as 可迭代,
@@ -42,6 +43,7 @@ import threading, _thread
 import time
 import sys
 import platform
+import socket
 
 
 
@@ -89,7 +91,27 @@ class 字符串(str):
             当前对象: 字符串, __旧字符串: 字符串, __新字符串: 字符串, __最大替换次数: 支持的索引 = -1
         ) -> 字符串:
         return 当前对象.replace(__旧字符串, __新字符串, __最大替换次数)
-class 字节串(bytes): pass
+    def 末尾去除字符(
+            当前对象: 字符串, __字符: 可选[字符串] = 无
+        ) -> 字符串:
+        return 当前对象.rstrip(__字符)
+    def 开头去除字符(
+            当前对象: 字符串, __字符: 可选[字符串] = 无
+        ) -> 字符串:
+        return 当前对象.lstrip(__字符)
+    def 两端去除字符(
+            当前对象: 字符串, __字符: 可选[字符串] = 无
+        ) -> 字符串:
+        return 当前对象.strip(__字符)
+    def 拆分(
+            当前对象: 字符串, 分隔符: 可选[字符串] = 无, 最大拆分次数: 支持的索引 = -1
+        ) -> 列表[字符串]:
+        return 当前对象.split(sep = 分隔符, maxsplit = 最大拆分次数)
+class 字节串(bytes):
+    def 解码(
+            当前对象: 字节串, 编码: 字符串 = "UTF-8", 错误处理方式: 字符串 = "strict"
+        ) -> 字符串:
+        return 当前对象.decode(encoding = 编码, errors = 错误处理方式)
 class 布尔值: pass
 class 整数(int): pass
 class 浮点数(float): pass
@@ -110,6 +132,11 @@ class 字节数组(bytearray): pass
 禁果.诅咒(str, "开头是否为", 字符串.开头是否为)
 禁果.诅咒(str, "末尾是否为", 字符串.末尾是否为)
 禁果.诅咒(str, "替换", 字符串.替换)
+禁果.诅咒(str, "末尾去除字符", 字符串.末尾去除字符)
+禁果.诅咒(str, "开头去除字符", 字符串.开头去除字符)
+禁果.诅咒(str, "两端去除字符", 字符串.两端去除字符)
+禁果.诅咒(str, "拆分", 字符串.拆分)
+禁果.诅咒(bytes, "解码", 字节串.解码)
 禁果.诅咒(list, "追加", 列表.追加)
 禁果.诅咒(list, "移除", 列表.移除)
 禁果.诅咒(dict, "键", 字典.键)
@@ -120,7 +147,7 @@ from builtins import (
     list as 列表, dict as 字典, tuple as 元组, bytes as 字节串, bytearray as 字节数组,
     property as 属性装饰器,
     max as 最大值, min as 最小值, print as 打印, input as 输入,
-    isinstance as 检查对象是否是类的实例, all as 全部为真, any as 任意为真, len as 长度
+    isinstance as 对象是否是类的实例, all as 全部为真, any as 任意为真, len as 长度
 )
 
 
@@ -151,11 +178,11 @@ class 打开:
         return 当前对象
     def __exit__(当前对象: 打开, 异常类型, 异常值, 异常回溯):
         当前对象.文件.close()
-    def 读取(当前对象: 打开, __读取长度: 可选[整数] = None) -> 字符串:
+    def 读取(当前对象: 打开, __读取长度: 可选[整数] = 无) -> 字符串:
         return 当前对象.文件.read(__读取长度)
     def 写入(当前对象: 打开, __文本: 可选[字符串]) -> 字符串:
         return 当前对象.文件.write(__文本)
-    def 关闭(当前对象: 打开) -> None:
+    def 关闭(当前对象: 打开) -> 无:
         当前对象.文件.close()
 
 
@@ -164,19 +191,36 @@ class JSON:
     def __init__(当前对象: JSON) -> 永不使用:
         raise 值的类型不合法('"模块" 对象不可调用.')
     @静态方法
-    def 加载(
+    def 解码(
         对象: 联合[字符串, 字节串, 字节数组],
         *,
-        JSON解码器: 可选[类型[JSON解码器]] = None,
-        对象自定义解码函数: 可选[可调用[[字典[任意, 任意]], 任意]] = None,
-        浮点数自定义解码函数: 可选[可调用[[字符串], 任意]] = None,
-        整数自定义解码函数: 可选[可调用[[字符串], 任意]] = None,
-        常量自定义解码函数: 可选[可调用[[字符串], 任意]] = None,
-        对象自定义解码键值函数: 可选[可调用[[可迭代[元组[任意, 任意]]], 任意]] = None,
+        JSON解码器: 可选[类型[JSON解码器]] = 无,
+        对象自定义解码函数: 可选[可调用[[字典[任意, 任意]], 任意]] = 无,
+        浮点数自定义解码函数: 可选[可调用[[字符串], 任意]] = 无,
+        整数自定义解码函数: 可选[可调用[[字符串], 任意]] = 无,
+        常量自定义解码函数: 可选[可调用[[字符串], 任意]] = 无,
+        对象自定义解码键值函数: 可选[可调用[[可迭代[元组[任意, 任意]]], 任意]] = 无,
         **关键字参数
         ) -> 任意:
         return json.loads(对象, cls = JSON解码器, object_hook = 对象自定义解码函数, parse_float = 浮点数自定义解码函数, parse_int = 整数自定义解码函数, parse_constant = 常量自定义解码函数, object_pairs_hook = 对象自定义解码键值函数, **关键字参数)
-禁果.诅咒(json, "加载", JSON.加载)
+    @静态方法
+    def 编码(
+        对象: 任意,
+        *,
+        是否忽略非基本类型键: 可选[布尔值] = 假,
+        是否转为美国信息互换标准代码: 可选[布尔值] = 真,
+        是否检查循环引用: 可选[布尔值] = 真,
+        是否允许不是一个数字的浮点数: 可选[布尔值] = 真,
+        # cls
+        缩进级别: 可选[联合[整数, 字符串]] = 无,
+        值键分隔符: 可选[元组[字符串, 字符串]] = 无,
+        # default
+        是否排序键: 可选[布尔值] = 假,
+        **关键字参数
+        ) -> 字符串:
+        return json.dumps(对象, skipkeys = 是否忽略非基本类型键, ensure_ascii = 是否转为美国信息互换标准代码, check_circular = 是否检查循环引用, allow_nan = 是否允许不是一个数字的浮点数, indent = 缩进级别, separators = 值键分隔符, sort_keys = 是否排序键, **关键字参数)
+禁果.诅咒(json, "解码", JSON.解码)
+禁果.诅咒(json, "编码", JSON.编码)
 import json as JSON
 
 
@@ -384,15 +428,15 @@ class 子进程:
             # start_new_session: bool = False,
             # pass_fds: Collection[int] = (),
             *,
-            # user: str | int | None = None,
-            # group: str | int | None = None,
-            # extra_groups: Iterable[str | int] | None = None,
+            # user: str | int | 无 = 无,
+            # group: str | int | 无 = 无,
+            # extra_groups: Iterable[str | int] | 无 = 无,
             编码: 可选[字符串] = 无,
             输出解码错误处理模式: 可选[字面["strict", "ignore", "replace"]] = 无,
             是否以文本模式返回输出: 可选[布尔值] = 无,
             # umask: int = -1,
             # pipesize: int = -1,
-            # process_group: int | None = None
+            # process_group: int | 无 = 无
         ):
             super().__init__(
                 args = 启动参数, bufsize = 缓冲区大小, executable = 程序路径,
@@ -408,3 +452,46 @@ class 子进程:
         @属性装饰器
         def 标准输出(当前对象: 子进程.启动进程) -> 输入输出:
             return 当前对象.stdout
+        @属性装饰器
+        def 标准错误输出(当前对象: 子进程.启动进程) -> 输入输出:
+            return 当前对象.stderr
+        @属性装饰器
+        def 标准输入(当前对象: 子进程.启动进程) -> 输入输出:
+            return 当前对象.stdin
+禁果.诅咒(subprocess, "管道", 子进程.管道)
+禁果.诅咒(subprocess, "标准输出", 子进程.标准输出)
+禁果.诅咒(subprocess, "启动进程", 子进程.启动进程)
+import subprocess as 子进程
+
+
+
+class 套接字:
+    地址族_互联网协议版本四 = socket.AF_INET
+    地址族_互联网协议版本六 = socket.AF_INET6
+    传输类型_流式 = socket.SOCK_STREAM
+    传输类型_数据报 = socket.SOCK_DGRAM
+    def __init__(当前对象) -> 永不使用:
+        raise 值的类型不合法('"模块" 对象不可调用.')
+    class 套接字(socket.socket):
+        def __init__(
+            当前对象: 套接字.套接字,
+            地址族: 整数 = -1,
+            传输类型: 整数 = -1,
+            传输协议: 整数 = -1,
+            文件描述符: 可选[整数] = 无
+        ) -> 无:
+            super().__init__(family = 地址族, type = 传输类型, proto = 传输协议, fileno = 文件描述符)
+        def 设置超时时间(当前对象: 套接字.套接字, 秒数: 浮点数) -> 无:
+            return 当前对象.settimeout(秒数)
+        def 绑定地址(当前对象: 套接字.套接字, 地址: 元组[字符串, 整数]) -> 无:
+            return 当前对象.bind(地址)
+        def 关闭(当前对象: 套接字.套接字) -> 无:
+            return 当前对象.close()
+        def 连接_不引发异常(当前对象: 套接字.套接字, 地址: 元组[字符串, 整数]) -> 整数:
+            return 当前对象.connect_ex(地址)
+禁果.诅咒(socket, "地址族_互联网协议版本四", 套接字.地址族_互联网协议版本四)
+禁果.诅咒(socket, "地址族_互联网协议版本六", 套接字.地址族_互联网协议版本六)
+禁果.诅咒(socket, "传输类型_流式", 套接字.传输类型_流式)
+禁果.诅咒(socket, "传输类型_数据报", 套接字.传输类型_数据报)
+禁果.诅咒(socket, "套接字", 套接字.套接字)
+import socket as 套接字
