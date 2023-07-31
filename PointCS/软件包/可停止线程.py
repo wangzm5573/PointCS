@@ -65,18 +65,19 @@ class 可停止线程(线程.线程):
                 可停止线程列表.移除(当前对象)
             打印("线程 %s 终止." % 当前对象.线程名称)
 
-    def 停止(当前对象: 可停止线程, 阻塞到停止: 布尔值 = 真) -> 可选[整数]:
+    def 停止(当前对象: 可停止线程, 阻塞到停止: 布尔值 = 真, 强制停止: 布尔值 = 假) -> 无:
         if 当前对象.正在停止:
             return
         if not 当前对象.正在运行:
             raise 可停止线程异常("停止线程异常: 线程未启动.")
         打印("线程 %s 正在终止." % 当前对象.线程名称)
-        if 当前对象.线程ID is 无:
-            raise 可停止线程异常("停止线程异常: 无法找到线程 ID.")
-        结果 = ctypes.pythonapi.PyThreadState_SetAsyncExc(当前对象.线程ID, ctypes.py_object(可停止线程被停止))
-        if (结果 != 1) and (not 当前对象.数据):
-            raise 可停止线程异常("停止线程异常: 出现错误.")
+        if 强制停止:
+            if 当前对象.线程ID is 无:
+                raise 可停止线程异常("停止线程异常: 无法找到线程 ID.")
+            结果 = ctypes.pythonapi.PyThreadState_SetAsyncExc(当前对象.线程ID, ctypes.py_object(可停止线程被停止))
+            if (结果 != 1) and (not 当前对象.数据):
+                raise 可停止线程异常("停止线程异常: 出现错误.")
         当前对象.正在停止 = 真
         if 阻塞到停止:
             当前对象.阻塞()
-        return 结果
+        return
