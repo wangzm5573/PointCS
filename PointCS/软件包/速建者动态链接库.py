@@ -52,7 +52,7 @@ class JsonStrAsIsGamePacketBytes函数返回类型(ctypes.Structure):
 
 
 def 初始化动态链接库():
-    LIB = ctypes.CDLL(f"./程序/速建者/{操作系统名称}_{位架构}.动态链接库")
+    LIB = ctypes.CDLL(f"./程序/速建者/{操作系统名称}_{处理器架构}.动态链接库")
 
     LIB.ConnectFB.argtypes = [去语言字符串]
     LIB.ConnectFB.restype = ConnectFB函数返回类型
